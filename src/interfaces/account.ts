@@ -1,3 +1,4 @@
 export interface Account {
-  // TODO: Add account interface
+  accountNumber: number;
+  balance: number;
 }
