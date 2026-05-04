@@ -15,7 +15,7 @@ export function registerAccount(accountNumber: number): Account {
   return newAccount;
 }
 
-export function consultarSaldo(accountNumber: number): number {
+export function checkBalance(accountNumber: number): number {
   const account = accounts.get(accountNumber);
   if (!account) {
     throw new Error(`Conta ${accountNumber} não encontrada`);
