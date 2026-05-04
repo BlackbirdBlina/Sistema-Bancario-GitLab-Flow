@@ -34,3 +34,15 @@ export function credit(accountNumber: number, amount: number) {
   account.balance += amount;
   accounts.set(accountNumber, account);
 }
+
+export function debit(accountNumber: number, amount: number) {
+  const account = accounts.get(accountNumber);
+  if (!account) {
+    throw new Error(`Conta ${accountNumber} não encontrada`);
+  }
+  if (amount <= 0) {
+    throw new Error("O valor deve ser maior que zero.");
+  }
+  account.balance -= amount;
+  accounts.set(accountNumber, account);
+}
