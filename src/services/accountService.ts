@@ -23,7 +23,7 @@ export function checkBalance(accountNumber: number): number {
   return account.balance;
 }
 
-export function credito(accountNumber: number, amount: number) {
+export function credit(accountNumber: number, amount: number) {
   const account = accounts.get(accountNumber);
   if (!account) {
     throw new Error(`Conta ${accountNumber} não encontrada`);
