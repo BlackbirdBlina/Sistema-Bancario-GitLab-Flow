@@ -46,3 +46,17 @@ export function debit(accountNumber: number, amount: number) {
   account.balance -= amount;
   accounts.set(accountNumber, account);
 }
+
+export function transfer(
+  sourceAccountNumber: number,
+  destinationAccountNumber: number,
+  amount: number
+) {
+  if (sourceAccountNumber === destinationAccountNumber) {
+    throw new Error(
+      "A conta de origem e a conta de destino não podem ser iguais."
+    );
+  }
+  debit(sourceAccountNumber, amount);
+  credit(destinationAccountNumber, amount);
+}
