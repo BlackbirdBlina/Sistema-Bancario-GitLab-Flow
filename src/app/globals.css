@@ -69,7 +69,9 @@ body::before {
   font-size: 0.8125rem;
   padding: 0 0.625rem;
   outline: none;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
   font-variant-numeric: tabular-nums;
 }
 
@@ -117,7 +119,9 @@ body::before {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: opacity 0.15s ease, filter 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    filter 0.15s ease;
 }
 
 .term-btn:hover {

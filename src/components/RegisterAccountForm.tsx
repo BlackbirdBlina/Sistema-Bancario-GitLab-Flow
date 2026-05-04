@@ -8,9 +8,7 @@ interface RegisterAccountFormProps {
   onChange?: () => void;
 }
 
-export default function RegisterAccountForm({
-  onChange,
-}: RegisterAccountFormProps) {
+export default function RegisterAccountForm({ onChange }: RegisterAccountFormProps) {
   const [accountNumber, setAccountNumber] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 

@@ -17,8 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Sistema Bancário",
-  description:
-    "Sistema Bancário para a disciplina de Gerência de Configuração e Mudanças",
+  description: "Sistema Bancário para a disciplina de Gerência de Configuração e Mudanças",
 };
 
 export default function RootLayout({
@@ -27,10 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="pt-BR"
-      className={`${ibmPlexCondensed.variable} ${jetbrainsMono.variable} h-full`}
-    >
+    <html lang="pt-BR" className={`${ibmPlexCondensed.variable} ${jetbrainsMono.variable} h-full`}>
       <body className="h-full">{children}</body>
     </html>
   );

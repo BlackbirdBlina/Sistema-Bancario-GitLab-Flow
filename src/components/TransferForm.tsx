@@ -62,10 +62,7 @@ export default function TransferForm({ onChange }: TransferFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2 flex-1">
-      <div
-        className="grid gap-2"
-        style={{ gridTemplateColumns: "1fr 1fr 1fr" }}
-      >
+      <div className="grid gap-2" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
         <div className="flex flex-col gap-1">
           <label htmlFor="transfer-source" className="term-label">
             Origem

@@ -10,9 +10,7 @@ interface AccountsListProps {
 }
 
 export default function AccountsList({ version: _ }: AccountsListProps) {
-  const rows = Array.from(accounts.values()).sort(
-    (a, b) => a.accountNumber - b.accountNumber
-  );
+  const rows = Array.from(accounts.values()).sort((a, b) => a.accountNumber - b.accountNumber);
 
   async function copyToClipboard(text: string) {
     try {
@@ -138,8 +136,8 @@ export default function AccountsList({ version: _ }: AccountsListProps) {
                         account.balance > 0
                           ? "var(--positive)"
                           : account.balance < 0
-                          ? "var(--negative)"
-                          : "var(--muted)",
+                            ? "var(--negative)"
+                            : "var(--muted)",
                       letterSpacing: "0.02em",
                     }}
                   >

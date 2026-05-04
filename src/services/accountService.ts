@@ -53,9 +53,7 @@ export function transfer(
   amount: number
 ) {
   if (sourceAccountNumber === destinationAccountNumber) {
-    throw new Error(
-      "A conta de origem e a conta de destino não podem ser iguais."
-    );
+    throw new Error("A conta de origem e a conta de destino não podem ser iguais.");
   }
   debit(sourceAccountNumber, amount);
   credit(destinationAccountNumber, amount);
