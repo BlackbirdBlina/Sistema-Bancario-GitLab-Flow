@@ -20,13 +20,8 @@ export default function FeedbackMessage({ feedback }: FeedbackMessageProps) {
         margin: 0,
         padding: "0.375rem 0.625rem",
         borderRadius: "3px",
-        borderLeft: `2px solid ${
-          feedback.type === "success" ? "var(--accent)" : "var(--danger)"
-        }`,
-        background:
-          feedback.type === "success"
-            ? "var(--accent-dim)"
-            : "var(--danger-dim)",
+        borderLeft: `2px solid ${feedback.type === "success" ? "var(--accent)" : "var(--danger)"}`,
+        background: feedback.type === "success" ? "var(--accent-dim)" : "var(--danger-dim)",
         color: feedback.type === "success" ? "var(--accent)" : "var(--danger)",
         letterSpacing: "0.02em",
       }}

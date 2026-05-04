@@ -2,16 +2,14 @@
 
 ## Integrantes
 
-*  Rodrigo Eduardo Dantas Barbalho
+- Rodrigo Eduardo Dantas Barbalho
+  - Perfil no GitHub: [Rodrigo Eduardo](https://github.com/rodrigoeduardo)
 
-    * Perfil no GitHub: [Rodrigo Eduardo](https://github.com/rodrigoeduardo)
-
-* Sabrina da Silva Barbosa Venceslau
-
-    * Perfil no GitHub: [Sabrina Venceslau](https://github.com/BlackbirdBlina)
+- Sabrina da Silva Barbosa Venceslau
+  - Perfil no GitHub: [Sabrina Venceslau](https://github.com/BlackbirdBlina)
 
 ## Stack de desenvolvimento
 
-* Linguagem: Typescript
+- Linguagem: Typescript
 
-* Framework: Next.js
+- Framework: Next.js

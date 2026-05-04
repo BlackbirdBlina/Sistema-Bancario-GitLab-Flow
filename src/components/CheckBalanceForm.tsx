@@ -5,9 +5,7 @@ import { checkBalance } from "@/services/accountService";
 import FeedbackMessage, { Feedback } from "./FeedbackMessage";
 
 const formatBRL = (value: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
-    value
-  );
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
 
 interface CheckBalanceFormProps {
   version?: number;
@@ -94,12 +92,7 @@ export default function CheckBalanceForm({ version }: CheckBalanceFormProps) {
             fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
             fontSize: "1.375rem",
             fontWeight: 700,
-            color:
-              balance < 0
-                ? "var(--danger)"
-                : balance === 0
-                ? "var(--muted)"
-                : "var(--accent)",
+            color: balance < 0 ? "var(--danger)" : balance === 0 ? "var(--muted)" : "var(--accent)",
             letterSpacing: "0.02em",
             paddingTop: "0.25rem",
           }}

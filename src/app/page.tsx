@@ -15,12 +15,7 @@ interface PanelProps {
   className?: string;
 }
 
-function Panel({
-  tag,
-  accentColor = "var(--hairline)",
-  children,
-  className = "",
-}: PanelProps) {
+function Panel({ tag, accentColor = "var(--hairline)", children, className = "" }: PanelProps) {
   return (
     <div
       className={`flex flex-col gap-3 rounded-sm p-4 ${className}`}
@@ -33,8 +28,7 @@ function Panel({
       <span
         className="panel-tag"
         style={{
-          color:
-            accentColor !== "var(--hairline)" ? accentColor : "var(--muted)",
+          color: accentColor !== "var(--hairline)" ? accentColor : "var(--muted)",
         }}
       >
         {tag}
@@ -77,8 +71,7 @@ export default function Home() {
           </span>
           <h1
             style={{
-              fontFamily:
-                "var(--font-display), 'IBM Plex Sans Condensed', sans-serif",
+              fontFamily: "var(--font-display), 'IBM Plex Sans Condensed', sans-serif",
               fontSize: "1rem",
               fontWeight: 700,
               letterSpacing: "0.04em",
@@ -132,11 +125,7 @@ export default function Home() {
             </Panel>
 
             <div style={{ gridColumn: "span 2", height: "100%" }}>
-              <Panel
-                tag="TRANSFERÊNCIA"
-                accentColor="var(--warn)"
-                className="h-full"
-              >
+              <Panel tag="TRANSFERÊNCIA" accentColor="var(--warn)" className="h-full">
                 <TransferForm onChange={refresh} />
               </Panel>
             </div>
