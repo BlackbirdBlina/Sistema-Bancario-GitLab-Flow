@@ -1,5 +1,5 @@
 import { accounts } from "@/store/accountStore";
-import { AccountType, BaseAccount, SavingsAccount } from "@/interfaces/account";
+import { AccountType } from "@/interfaces/account";
 
 export function registerAccount(
   accountNumber: number,
