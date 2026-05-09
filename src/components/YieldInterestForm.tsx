@@ -28,7 +28,7 @@ export default function YieldInterestForm({ onChange }: YieldInterestFormProps) 
     }
     try {
       for (const account of accounts) {
-        if (account[1].type === "poupanca") {
+        if (account[1].type === "savings") {
           yieldInterest(account[0], n);
         }
       }

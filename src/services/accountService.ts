@@ -3,7 +3,7 @@ import { AccountType } from "@/interfaces/account";
 
 export function registerAccount(
   accountNumber: number,
-  type: "base" | "poupanca" = "base"
+  type: "base" | "savings" = "base"
 ): AccountType {
   if (accounts.has(accountNumber)) {
     throw new Error(
@@ -68,7 +68,7 @@ export function yieldInterest(accountNumber: number, interestRate: number) {
   if (!account) {
     throw new Error(`Conta ${accountNumber} não encontrada`);
   }
-  if (account.type !== "poupanca") {
+  if (account.type !== "savings") {
     throw new Error("Apenas contas poupança podem render juros.");
   }
   if (interestRate <= 0) {

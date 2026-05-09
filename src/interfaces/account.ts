@@ -1,7 +1,7 @@
 export interface Account {
   accountNumber: number;
   balance: number;
-  type: "base" | "poupanca";
+  type: "base" | "savings";
 }
 
 export interface BaseAccount extends Account {
@@ -9,7 +9,7 @@ export interface BaseAccount extends Account {
 }
 
 export interface SavingsAccount extends Account {
-  type: "poupanca";
+  type: "savings";
 }
 
 export type AccountType = BaseAccount | SavingsAccount;
