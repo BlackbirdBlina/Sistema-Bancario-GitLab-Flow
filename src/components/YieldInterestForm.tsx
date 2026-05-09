@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { yieldInterest } from "@/services/accountService";
 import FeedbackMessage, { Feedback } from "./FeedbackMessage";
 import { accounts } from "@/store/accountStore";
@@ -18,7 +18,7 @@ export default function YieldInterestForm({ onChange }: YieldInterestFormProps) 
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const n = parseInt(interestRate, 10);
+    const n = parseFloat(interestRate);
     if (!interestRate || isNaN(n) || n <= 0) {
       setFeedback({
         type: "error",
@@ -56,8 +56,8 @@ export default function YieldInterestForm({ onChange }: YieldInterestFormProps) 
             id="interest-rate"
             type="number"
             inputMode="numeric"
-            min="1"
-            step="1"
+            min="0.01"
+            step="0.01"
             placeholder="Ex: 5"
             value={interestRate}
             onChange={(e) => {
