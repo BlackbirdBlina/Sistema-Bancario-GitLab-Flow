@@ -1,15 +1,19 @@
 import { accounts } from "@/store/accountStore";
-import { Account } from "@/interfaces/account";
+import { AccountType } from "@/interfaces/account";
 
-export function registerAccount(accountNumber: number): Account {
+export function registerAccount(
+  accountNumber: number,
+  type: "base" | "savings" = "base"
+): AccountType {
   if (accounts.has(accountNumber)) {
     throw new Error(
       `Número de conta ${accountNumber} já existe. Escolha outro número para a conta.`
     );
   }
-  const newAccount: Account = {
+  const newAccount: AccountType = {
     accountNumber,
     balance: 0,
+    type,
   };
   accounts.set(accountNumber, newAccount);
   return newAccount;
@@ -57,4 +61,20 @@ export function transfer(
   }
   debit(sourceAccountNumber, amount);
   credit(destinationAccountNumber, amount);
+}
+
+export function yieldInterest(accountNumber: number, interestRate: number) {
+  const account = accounts.get(accountNumber);
+  if (!account) {
+    throw new Error(`Conta ${accountNumber} não encontrada`);
+  }
+  if (account.type !== "savings") {
+    throw new Error("Apenas contas poupança podem render juros.");
+  }
+  if (interestRate <= 0) {
+    throw new Error("A taxa de juros deve ser maior que zero.");
+  }
+  const interest = account.balance * (interestRate / 100);
+  account.balance += interest;
+  accounts.set(accountNumber, account);
 }
