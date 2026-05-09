@@ -1,7 +1,7 @@
 export interface Account {
   accountNumber: number;
   balance: number;
-  type: "base" | "savings";
+  type: "base" | "savings" | "bonus";
 }
 
 export interface BaseAccount extends Account {
@@ -12,4 +12,9 @@ export interface SavingsAccount extends Account {
   type: "savings";
 }
 
-export type AccountType = BaseAccount | SavingsAccount;
+export interface BonusAccount extends Account {
+  type: "bonus";
+  score: number;
+}
+
+export type AccountType = BaseAccount | SavingsAccount | BonusAccount;
