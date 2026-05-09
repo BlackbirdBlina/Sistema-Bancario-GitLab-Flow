@@ -10,7 +10,7 @@ interface RegisterAccountFormProps {
 
 export default function RegisterAccountForm({ onChange }: RegisterAccountFormProps) {
   const [accountNumber, setAccountNumber] = useState("");
-  const [accountType, setAccountType] = useState<"base" | "savings">("base");
+  const [accountType, setAccountType] = useState<"base" | "savings" | "bonus">("base");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   function handleSubmit(e: React.SubmitEvent) {
@@ -64,13 +64,14 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
           id="register-account-type"
           value={accountType}
           onChange={(e) => {
-            setAccountType(e.target.value as "base" | "savings");
+            setAccountType(e.target.value as "base" | "savings" | "bonus");
             setFeedback(null);
           }}
           className="term-input"
         >
           <option value="base">Conta Base</option>
           <option value="savings">Conta Poupança</option>
+          <option value="bonus">Conta Bônus</option>
         </select>
       </div>
       <button type="submit" className="term-btn term-btn-accent mt-1">
