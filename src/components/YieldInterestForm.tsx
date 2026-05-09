@@ -9,28 +9,12 @@ const formatBRL = (value: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
 
 interface YieldInterestFormProps {
-  version?: number;
+  onChange?: () => void;
 }
 
-export default function YieldInterestForm({ version }: YieldInterestFormProps) {
+export default function YieldInterestForm({ onChange }: YieldInterestFormProps) {
   const [interestRate, setInterestRate] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
-
-  useEffect(() => {
-    if (interestRate) {
-      const n = parseInt(interestRate, 10);
-      if (!isNaN(n) && n > 0) {
-        try {
-          // eslint-disable-next-line react-hooks/set-state-in-effect
-          //   setBalance(checkBalance(n));
-          setFeedback(null);
-        } catch {
-          // conta pode ter sido deletada; ignora silenciosamente
-        }
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [version]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -48,7 +32,11 @@ export default function YieldInterestForm({ version }: YieldInterestFormProps) {
           yieldInterest(account[0], n);
         }
       }
-      setFeedback(null);
+      setFeedback({
+        type: "success",
+        text: "Juros aplicados com sucesso.",
+      });
+      onChange?.();
     } catch (err) {
       setFeedback({
         type: "error",
@@ -63,20 +51,25 @@ export default function YieldInterestForm({ version }: YieldInterestFormProps) {
         <label htmlFor="interest-rate" className="term-label">
           Taxa de juros
         </label>
-        <input
-          id="interest-rate"
-          type="number"
-          inputMode="numeric"
-          min="1"
-          step="1"
-          placeholder="Ex: 1001"
-          value={interestRate}
-          onChange={(e) => {
-            setInterestRate(e.target.value);
-            setFeedback(null);
-          }}
-          className="term-input"
-        />
+        <div className="flex items-center gap-2">
+          <input
+            id="interest-rate"
+            type="number"
+            inputMode="numeric"
+            min="1"
+            step="1"
+            placeholder="Ex: 5"
+            value={interestRate}
+            onChange={(e) => {
+              setInterestRate(e.target.value);
+              setFeedback(null);
+            }}
+            className="term-input min-w-[7rem]"
+          />
+          <span className="term-label" style={{ display: "inline-flex", marginBottom: 0 }}>
+            %
+          </span>
+        </div>
       </div>
       <button type="submit" className="term-btn term-btn-accent mt-1">
         Aplicar Juros

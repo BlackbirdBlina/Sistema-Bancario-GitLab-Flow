@@ -132,7 +132,7 @@ export default function Home() {
             </div>
 
             <Panel tag="JUROS" accentColor="var(--accent)">
-              <YieldInterestForm version={version} />
+              <YieldInterestForm onChange={refresh} />
             </Panel>
           </div>
         </main>
