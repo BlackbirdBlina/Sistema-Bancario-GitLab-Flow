@@ -1,15 +1,19 @@
 import { accounts } from "@/store/accountStore";
-import { Account } from "@/interfaces/account";
+import { AccountType, BaseAccount, SavingsAccount } from "@/interfaces/account";
 
-export function registerAccount(accountNumber: number): Account {
+export function registerAccount(
+  accountNumber: number,
+  type: "base" | "poupanca" = "base"
+): AccountType {
   if (accounts.has(accountNumber)) {
     throw new Error(
       `Número de conta ${accountNumber} já existe. Escolha outro número para a conta.`
     );
   }
-  const newAccount: Account = {
+  const newAccount: AccountType = {
     accountNumber,
     balance: 0,
+    type,
   };
   accounts.set(accountNumber, newAccount);
   return newAccount;
