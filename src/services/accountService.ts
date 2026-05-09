@@ -62,3 +62,19 @@ export function transfer(
   debit(sourceAccountNumber, amount);
   credit(destinationAccountNumber, amount);
 }
+
+export function yieldInterest(accountNumber: number, interestRate: number) {
+  const account = accounts.get(accountNumber);
+  if (!account) {
+    throw new Error(`Conta ${accountNumber} não encontrada`);
+  }
+  if (account.type !== "poupanca") {
+    throw new Error("Apenas contas poupança podem render juros.");
+  }
+  if (interestRate <= 0) {
+    throw new Error("A taxa de juros deve ser maior que zero.");
+  }
+  const interest = account.balance * (interestRate / 100);
+  account.balance += interest;
+  accounts.set(accountNumber, account);
+}
