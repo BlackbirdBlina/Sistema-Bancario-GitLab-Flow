@@ -43,6 +43,9 @@ export function debit(accountNumber: number, amount: number) {
   if (amount <= 0) {
     throw new Error("O valor deve ser maior que zero.");
   }
+  if (account.balance < amount) {
+    throw new Error("Saldo insuficiente para débito.");
+  }
   account.balance -= amount;
   accounts.set(accountNumber, account);
 }
