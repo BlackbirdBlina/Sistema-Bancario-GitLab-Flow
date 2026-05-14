@@ -1,5 +1,6 @@
 import { accounts } from "@/store/accountStore";
 import { AccountType, BonusAccount } from "@/interfaces/account";
+import { balanceFloorByAccountType } from "@/constants/account";
 
 export function registerAccount(
   accountNumber: number,
@@ -54,10 +55,12 @@ export function debit(accountNumber: number, amount: number) {
   if (amount <= 0) {
     throw new Error("O valor deve ser maior que zero.");
   }
-  if (account.balance < amount) {
+  const floor = balanceFloorByAccountType[account.type];
+  const newBalance = account.balance - amount;
+  if (newBalance < floor) {
     throw new Error("Saldo insuficiente para débito.");
   }
-  account.balance -= amount;
+  account.balance = newBalance;
   accounts.set(accountNumber, account);
 }
 
