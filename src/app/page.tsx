@@ -7,6 +7,7 @@ import CreditForm from "@/components/CreditForm";
 import DebitForm from "@/components/DebitForm";
 import TransferForm from "@/components/TransferForm";
 import AccountsList from "@/components/AccountsList";
+import YieldInterestForm from "@/components/YieldInterestForm";
 
 interface PanelProps {
   tag: string;
@@ -129,6 +130,10 @@ export default function Home() {
                 <TransferForm onChange={refresh} />
               </Panel>
             </div>
+
+            <Panel tag="JUROS" accentColor="var(--accent)">
+              <YieldInterestForm onChange={refresh} />
+            </Panel>
           </div>
         </main>
 
