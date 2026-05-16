@@ -11,6 +11,7 @@ interface RegisterAccountFormProps {
 export default function RegisterAccountForm({ onChange }: RegisterAccountFormProps) {
   const [accountNumber, setAccountNumber] = useState("");
   const [accountType, setAccountType] = useState<"base" | "savings" | "bonus">("base");
+  const [initialBalance, setInitialBalance] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   function handleSubmit(e: React.SubmitEvent) {
@@ -24,10 +25,11 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
       return;
     }
     try {
-      registerAccount(n, accountType);
+      registerAccount(n, accountType, parseFloat(initialBalance) || 0);
       setFeedback({ type: "success", text: `Conta ${n} criada com sucesso.` });
       setAccountNumber("");
       setAccountType("base");
+      setInitialBalance("");
       onChange?.();
     } catch (err) {
       setFeedback({
@@ -65,6 +67,7 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
           value={accountType}
           onChange={(e) => {
             setAccountType(e.target.value as "base" | "savings" | "bonus");
+            setInitialBalance("");
             setFeedback(null);
           }}
           className="term-input"
@@ -73,6 +76,28 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
           <option value="savings">Conta Poupança</option>
           <option value="bonus">Conta Bônus</option>
         </select>
+        {/* Campo condicional para saldo inicial, visível apenas para conta poupança */}
+        {accountType === "savings" && (
+          <div className="flex flex-col gap-1">
+            <label htmlFor="initial-balance" className="term-label">
+              Saldo Inicial
+            </label>
+            <input
+              id="initial-balance"
+              type="number"
+              inputMode="numeric"
+              min="0"
+              step="0.01"
+              placeholder="Ex: 100.00"
+              value={initialBalance}
+              onChange={(e) => {
+                setInitialBalance(e.target.value);
+                setFeedback(null);
+              }}
+              className="term-input"
+            />
+          </div>
+        )}
       </div>
       <button type="submit" className="term-btn term-btn-accent mt-1">
         Registrar

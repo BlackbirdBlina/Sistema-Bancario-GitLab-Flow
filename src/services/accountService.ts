@@ -4,7 +4,8 @@ import { balanceFloorByAccountType } from "@/constants/account";
 
 export function registerAccount(
   accountNumber: number,
-  type: "base" | "savings" | "bonus" = "base"
+  type: "base" | "savings" | "bonus" = "base",
+  initialBalance: number = 0
 ): AccountType {
   if (accounts.has(accountNumber)) {
     throw new Error(
@@ -15,6 +16,9 @@ export function registerAccount(
     type === "bonus"
       ? { accountNumber, balance: 0, type: "bonus", score: 10 }
       : { accountNumber, balance: 0, type };
+  if (type === "savings") {
+    newAccount.balance = initialBalance;
+  }
   accounts.set(accountNumber, newAccount);
   return newAccount;
 }
