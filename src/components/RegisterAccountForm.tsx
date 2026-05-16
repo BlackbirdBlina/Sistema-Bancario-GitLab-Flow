@@ -10,11 +10,13 @@ interface RegisterAccountFormProps {
 
 export default function RegisterAccountForm({ onChange }: RegisterAccountFormProps) {
   const [accountNumber, setAccountNumber] = useState("");
+  const [initialBalance, setInitialBalance] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     const n = parseInt(accountNumber, 10);
+    const initialBalanceValue = parseFloat(initialBalance);
     if (!accountNumber || isNaN(n) || n <= 0) {
       setFeedback({
         type: "error",
@@ -22,10 +24,18 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
       });
       return;
     }
+    if (isNaN(initialBalanceValue) || initialBalanceValue < 0) {
+      setFeedback({
+        type: "error",
+        text: "Informe um saldo inicial válido.",
+      });
+      return;
+    }
     try {
-      registerAccount(n);
+      registerAccount(n, initialBalanceValue);
       setFeedback({ type: "success", text: `Conta ${n} criada com sucesso.` });
       setAccountNumber("");
+      setInitialBalance("");
       onChange?.();
     } catch (err) {
       setFeedback({
@@ -51,6 +61,26 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
           value={accountNumber}
           onChange={(e) => {
             setAccountNumber(e.target.value);
+            setInitialBalance("");
+            setFeedback(null);
+          }}
+          className="term-input"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label htmlFor="register-initial-balance" className="term-label">
+          Saldo inicial
+        </label>
+        <input
+          id="register-initial-balance"
+          type="number"
+          inputMode="decimal"
+          min="0"
+          step="0.01"
+          placeholder="Ex: 100.00"
+          value={initialBalance}
+          onChange={(e) => {
+            setInitialBalance(e.target.value);
             setFeedback(null);
           }}
           className="term-input"
