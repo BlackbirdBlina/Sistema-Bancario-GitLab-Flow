@@ -1,9 +1,11 @@
 import { accounts } from "@/store/accountStore";
+import { Account } from "@/interfaces/account";
 import { AccountType, BonusAccount } from "@/interfaces/account";
 
 export function registerAccount(
   accountNumber: number,
-  type: "base" | "savings" | "bonus" = "base"
+  type: "base" | "savings" | "bonus" = "base",
+  initialBalance: number = 0
 ): AccountType {
   if (accounts.has(accountNumber)) {
     throw new Error(
@@ -12,8 +14,8 @@ export function registerAccount(
   }
   const newAccount: AccountType =
     type === "bonus"
-      ? { accountNumber, balance: 0, type: "bonus", score: 10 }
-      : { accountNumber, balance: 0, type };
+      ? { accountNumber, balance: initialBalance, type: "bonus", score: 10 }
+      : { accountNumber, balance: initialBalance, type };
   accounts.set(accountNumber, newAccount);
   return newAccount;
 }
