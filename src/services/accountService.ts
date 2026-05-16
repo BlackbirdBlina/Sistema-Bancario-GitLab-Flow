@@ -1,7 +1,7 @@
 import { accounts } from "@/store/accountStore";
 import { Account } from "@/interfaces/account";
 
-export function registerAccount(accountNumber: number): Account {
+export function registerAccount(accountNumber: number, initialBalance: number = 0): Account {
   if (accounts.has(accountNumber)) {
     throw new Error(
       `Número de conta ${accountNumber} já existe. Escolha outro número para a conta.`
@@ -9,7 +9,7 @@ export function registerAccount(accountNumber: number): Account {
   }
   const newAccount: Account = {
     accountNumber,
-    balance: 0,
+    balance: initialBalance,
   };
   accounts.set(accountNumber, newAccount);
   return newAccount;
