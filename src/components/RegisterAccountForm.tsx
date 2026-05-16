@@ -11,6 +11,7 @@ interface RegisterAccountFormProps {
 export default function RegisterAccountForm({ onChange }: RegisterAccountFormProps) {
   const [accountNumber, setAccountNumber] = useState("");
   const [initialBalance, setInitialBalance] = useState("");
+  const [accountType, setAccountType] = useState<"base" | "savings" | "bonus">("base");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   function handleSubmit(e: React.SubmitEvent) {
@@ -32,9 +33,10 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
       return;
     }
     try {
-      registerAccount(n, initialBalanceValue);
+      registerAccount(n, accountType, initialBalanceValue);
       setFeedback({ type: "success", text: `Conta ${n} criada com sucesso.` });
       setAccountNumber("");
+      setAccountType("base");
       setInitialBalance("");
       onChange?.();
     } catch (err) {
@@ -85,6 +87,22 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
           }}
           className="term-input"
         />
+        <label htmlFor="register-account-type" className="term-label">
+          Tipo de conta
+        </label>
+        <select
+          id="register-account-type"
+          value={accountType}
+          onChange={(e) => {
+            setAccountType(e.target.value as "base" | "savings" | "bonus");
+            setFeedback(null);
+          }}
+          className="term-input"
+        >
+          <option value="base">Conta Base</option>
+          <option value="savings">Conta Poupança</option>
+          <option value="bonus">Conta Bônus</option>
+        </select>
       </div>
       <button type="submit" className="term-btn term-btn-accent mt-1">
         Registrar
