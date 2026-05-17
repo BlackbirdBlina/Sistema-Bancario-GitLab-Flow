@@ -14,11 +14,8 @@ export function registerAccount(
   }
   const newAccount: AccountType =
     type === "bonus"
-      ? { accountNumber, balance: 0, type: "bonus", score: 10 }
-      : { accountNumber, balance: 0, type };
-  if (type === "savings") {
-    newAccount.balance = initialBalance;
-  }
+      ? { accountNumber, balance: initialBalance, type: "bonus", score: 10 }
+      : { accountNumber, balance: initialBalance, type };
   accounts.set(accountNumber, newAccount);
   return newAccount;
 }
