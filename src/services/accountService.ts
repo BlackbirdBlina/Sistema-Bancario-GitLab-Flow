@@ -1,16 +1,21 @@
 import { accounts } from "@/store/accountStore";
-import { Account } from "@/interfaces/account";
+import { AccountType, BonusAccount } from "@/interfaces/account";
+import { balanceFloorByAccountType } from "@/constants/account";
 
-export function registerAccount(accountNumber: number, initialBalance: number = 0): Account {
+export function registerAccount(
+  accountNumber: number,
+  type: "base" | "savings" | "bonus" = "base",
+  initialBalance: number = 0
+): AccountType {
   if (accounts.has(accountNumber)) {
     throw new Error(
       `Número de conta ${accountNumber} já existe. Escolha outro número para a conta.`
     );
   }
-  const newAccount: Account = {
-    accountNumber,
-    balance: initialBalance,
-  };
+  const newAccount: AccountType =
+    type === "bonus"
+      ? { accountNumber, balance: initialBalance, type: "bonus", score: 10 }
+      : { accountNumber, balance: initialBalance, type };
   accounts.set(accountNumber, newAccount);
   return newAccount;
 }
@@ -23,7 +28,11 @@ export function checkBalance(accountNumber: number): number {
   return account.balance;
 }
 
-export function credit(accountNumber: number, amount: number) {
+export function credit(
+  accountNumber: number,
+  amount: number,
+  source: "deposit" | "transfer" = "deposit"
+) {
   const account = accounts.get(accountNumber);
   if (!account) {
     throw new Error(`Conta ${accountNumber} não encontrada`);
@@ -32,6 +41,10 @@ export function credit(accountNumber: number, amount: number) {
     throw new Error("O valor deve ser maior que zero.");
   }
   account.balance += amount;
+  if (account.type === "bonus") {
+    const divisor = source === "deposit" ? 150 : 200;
+    (account as BonusAccount).score += Math.floor(amount / divisor);
+  }
   accounts.set(accountNumber, account);
 }
 
@@ -43,10 +56,12 @@ export function debit(accountNumber: number, amount: number) {
   if (amount <= 0) {
     throw new Error("O valor deve ser maior que zero.");
   }
-  if (account.balance < amount) {
+  const floor = balanceFloorByAccountType[account.type];
+  const newBalance = account.balance - amount;
+  if (newBalance < floor) {
     throw new Error("Saldo insuficiente para débito.");
   }
-  account.balance -= amount;
+  account.balance = newBalance;
   accounts.set(accountNumber, account);
 }
 
@@ -62,5 +77,21 @@ export function transfer(
     throw new Error("O valor deve ser maior que zero.");
   }
   debit(sourceAccountNumber, amount);
-  credit(destinationAccountNumber, amount);
+  credit(destinationAccountNumber, amount, "transfer");
+}
+
+export function yieldInterest(accountNumber: number, interestRate: number) {
+  const account = accounts.get(accountNumber);
+  if (!account) {
+    throw new Error(`Conta ${accountNumber} não encontrada`);
+  }
+  if (account.type !== "savings") {
+    throw new Error("Apenas contas poupança podem render juros.");
+  }
+  if (interestRate <= 0) {
+    throw new Error("A taxa de juros deve ser maior que zero.");
+  }
+  const interest = account.balance * (interestRate / 100);
+  account.balance += interest;
+  accounts.set(accountNumber, account);
 }

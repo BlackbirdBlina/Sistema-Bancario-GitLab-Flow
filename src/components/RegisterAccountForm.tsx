@@ -10,13 +10,14 @@ interface RegisterAccountFormProps {
 
 export default function RegisterAccountForm({ onChange }: RegisterAccountFormProps) {
   const [accountNumber, setAccountNumber] = useState("");
+  const [accountType, setAccountType] = useState<"base" | "savings" | "bonus">("base");
   const [initialBalance, setInitialBalance] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
 
   function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     const n = parseInt(accountNumber, 10);
-    const initialBalanceValue = parseFloat(initialBalance);
+    const initialBalanceValue = parseFloat(initialBalance || "0");
     if (!accountNumber || isNaN(n) || n <= 0) {
       setFeedback({
         type: "error",
@@ -24,7 +25,10 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
       });
       return;
     }
-    if (isNaN(initialBalanceValue) || initialBalanceValue < 0) {
+    if (
+      (isNaN(initialBalanceValue) || initialBalanceValue <= 0) &&
+      (accountType === "savings" || accountType === "base")
+    ) {
       setFeedback({
         type: "error",
         text: "Informe um saldo inicial válido.",
@@ -32,9 +36,10 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
       return;
     }
     try {
-      registerAccount(n, initialBalanceValue);
+      registerAccount(n, accountType, initialBalanceValue);
       setFeedback({ type: "success", text: `Conta ${n} criada com sucesso.` });
       setAccountNumber("");
+      setAccountType("base");
       setInitialBalance("");
       onChange?.();
     } catch (err) {
@@ -68,24 +73,47 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="register-initial-balance" className="term-label">
-          Saldo inicial
+        <label htmlFor="register-account-type" className="term-label">
+          Tipo de conta
         </label>
-        <input
-          id="register-initial-balance"
-          type="number"
-          inputMode="decimal"
-          min="0"
-          step="0.01"
-          placeholder="Ex: 100.00"
-          value={initialBalance}
+        <select
+          id="register-account-type"
+          value={accountType}
           onChange={(e) => {
-            setInitialBalance(e.target.value);
+            setAccountType(e.target.value as "base" | "savings" | "bonus");
+            setInitialBalance("");
             setFeedback(null);
           }}
           className="term-input"
-        />
+        >
+          <option value="base">Conta Base</option>
+          <option value="savings">Conta Poupança</option>
+          <option value="bonus">Conta Bônus</option>
+        </select>
       </div>
+      {/* Campo condicional para saldo inicial, visível apenas para conta poupança ou base */}
+      {(accountType === "savings" || accountType === "base") && (
+        <div className="flex flex-col gap-1">
+          <label htmlFor="initial-balance" className="term-label">
+            Saldo Inicial
+          </label>
+          <input
+            id="initial-balance"
+            type="number"
+            inputMode="numeric"
+            min="0"
+            step="0.01"
+            placeholder="Ex: 100.00"
+            value={initialBalance}
+            onChange={(e) => {
+              setInitialBalance(e.target.value);
+              setFeedback(null);
+            }}
+            className="term-input"
+          />
+        </div>
+      )}
+
       <button type="submit" className="term-btn term-btn-accent mt-1">
         Registrar
       </button>

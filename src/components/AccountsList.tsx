@@ -1,6 +1,7 @@
 "use client";
 
 import { accounts } from "@/store/accountStore";
+import { BonusAccount } from "@/interfaces/account";
 
 const formatBRL = (value: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
@@ -124,7 +125,7 @@ export default function AccountsList({ version: _ }: AccountsListProps) {
                   </div>
                 </div>
 
-                {/* Right: balance + copy */}
+                {/* Right: balance + score (bônus) + copy */}
                 <div className="flex flex-col items-end gap-1">
                   <div
                     className="tnum"
@@ -143,6 +144,19 @@ export default function AccountsList({ version: _ }: AccountsListProps) {
                   >
                     {formatBRL(account.balance)}
                   </div>
+                  {account.type === "bonus" && (
+                    <div
+                      style={{
+                        fontFamily: "var(--font-mono), 'JetBrains Mono', monospace",
+                        fontSize: "0.6875rem",
+                        fontWeight: 600,
+                        color: "var(--accent)",
+                        letterSpacing: "0.06em",
+                      }}
+                    >
+                      {(account as BonusAccount).score} pts
+                    </div>
+                  )}
                   <button
                     type="button"
                     title="Copiar número da conta"
