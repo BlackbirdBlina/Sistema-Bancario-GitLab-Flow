@@ -1,5 +1,4 @@
 import { accounts } from "@/store/accountStore";
-import { Account } from "@/interfaces/account";
 import { AccountType, BonusAccount } from "@/interfaces/account";
 import { balanceFloorByAccountType } from "@/constants/account";
 

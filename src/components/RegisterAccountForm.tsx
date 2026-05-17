@@ -10,7 +10,6 @@ interface RegisterAccountFormProps {
 
 export default function RegisterAccountForm({ onChange }: RegisterAccountFormProps) {
   const [accountNumber, setAccountNumber] = useState("");
-  const [initialBalance, setInitialBalance] = useState("");
   const [accountType, setAccountType] = useState<"base" | "savings" | "bonus">("base");
   const [initialBalance, setInitialBalance] = useState("");
   const [feedback, setFeedback] = useState<Feedback | null>(null);
@@ -71,23 +70,6 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="register-initial-balance" className="term-label">
-          Saldo inicial
-        </label>
-        <input
-          id="register-initial-balance"
-          type="number"
-          inputMode="decimal"
-          min="0"
-          step="0.01"
-          placeholder="Ex: 100.00"
-          value={initialBalance}
-          onChange={(e) => {
-            setInitialBalance(e.target.value);
-            setFeedback(null);
-          }}
-          className="term-input"
-        />
         <label htmlFor="register-account-type" className="term-label">
           Tipo de conta
         </label>
@@ -105,29 +87,30 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
           <option value="savings">Conta Poupança</option>
           <option value="bonus">Conta Bônus</option>
         </select>
-        {/* Campo condicional para saldo inicial, visível apenas para conta poupança */}
-        {accountType === "savings" && (
-          <div className="flex flex-col gap-1">
-            <label htmlFor="initial-balance" className="term-label">
-              Saldo Inicial
-            </label>
-            <input
-              id="initial-balance"
-              type="number"
-              inputMode="numeric"
-              min="0"
-              step="0.01"
-              placeholder="Ex: 100.00"
-              value={initialBalance}
-              onChange={(e) => {
-                setInitialBalance(e.target.value);
-                setFeedback(null);
-              }}
-              className="term-input"
-            />
-          </div>
-        )}
       </div>
+      {/* Campo condicional para saldo inicial, visível apenas para conta poupança ou base */}
+      {(accountType === "savings" || accountType === "base") && (
+        <div className="flex flex-col gap-1">
+          <label htmlFor="initial-balance" className="term-label">
+            Saldo Inicial
+          </label>
+          <input
+            id="initial-balance"
+            type="number"
+            inputMode="numeric"
+            min="0"
+            step="0.01"
+            placeholder="Ex: 100.00"
+            value={initialBalance}
+            onChange={(e) => {
+              setInitialBalance(e.target.value);
+              setFeedback(null);
+            }}
+            className="term-input"
+          />
+        </div>
+      )}
+
       <button type="submit" className="term-btn term-btn-accent mt-1">
         Registrar
       </button>
