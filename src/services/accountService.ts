@@ -42,7 +42,7 @@ export function credit(
   }
   account.balance += amount;
   if (account.type === "bonus") {
-    const divisor = source === "deposit" ? 100 : 200;
+    const divisor = source === "deposit" ? 150 : 200;
     (account as BonusAccount).score += Math.floor(amount / divisor);
   }
   accounts.set(accountNumber, account);

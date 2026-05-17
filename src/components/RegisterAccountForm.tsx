@@ -17,7 +17,7 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
   function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     const n = parseInt(accountNumber, 10);
-    const initialBalanceValue = parseFloat(initialBalance);
+    const initialBalanceValue = parseFloat(initialBalance || "0");
     if (!accountNumber || isNaN(n) || n <= 0) {
       setFeedback({
         type: "error",
@@ -25,7 +25,10 @@ export default function RegisterAccountForm({ onChange }: RegisterAccountFormPro
       });
       return;
     }
-    if (isNaN(initialBalanceValue) || initialBalanceValue < 0) {
+    if (
+      (isNaN(initialBalanceValue) || initialBalanceValue <= 0) &&
+      (accountType === "savings" || accountType === "base")
+    ) {
       setFeedback({
         type: "error",
         text: "Informe um saldo inicial válido.",
