@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import RegisterAccountForm from "@/components/RegisterAccountForm";
-import CheckBalanceForm from "@/components/CheckBalanceForm";
+import ConsultAccountForm from "@/components/ConsultAccountForm";
 import CreditForm from "@/components/CreditForm";
 import DebitForm from "@/components/DebitForm";
 import TransferForm from "@/components/TransferForm";
@@ -112,8 +112,8 @@ export default function Home() {
               <RegisterAccountForm onChange={refresh} />
             </Panel>
 
-            <Panel tag="SALDO" accentColor="#818cf8">
-              <CheckBalanceForm version={version} />
+            <Panel tag="CONSULTAR" accentColor="#818cf8">
+              <ConsultAccountForm version={version} />
             </Panel>
 
             <Panel tag="CRÉDITO" accentColor="var(--accent)">
