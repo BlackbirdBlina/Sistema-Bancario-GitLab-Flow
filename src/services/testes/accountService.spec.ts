@@ -9,6 +9,7 @@ import {
   yieldInterest,
 } from "../accountService";
 import { accounts } from "@/store/accountStore";
+import { BonusAccount } from "@/interfaces/account";
 
 describe("AccountService", () => {
   beforeEach(() => {
@@ -154,7 +155,7 @@ describe("AccountService", () => {
     credit(125, 300);
     const account = accounts.get(125);
     expect(account?.balance).toBe(350);
-    expect((account as any).score).toBe(12);
+    expect((account as BonusAccount).score).toBe(12);
   });
 
   it("should throw an error when trying to deposit into a non-existent account", () => {
@@ -176,7 +177,7 @@ describe("AccountService", () => {
     expect(checkBalance(122)).toBe(200);
     expect(checkBalance(125)).toBe(100);
     const account = accounts.get(125);
-    expect((account as any).score).toBe(10);
+    expect((account as BonusAccount).score).toBe(10);
   });
 
   it("should throw an error when trying TRANSFER FROM a non-existent account", () => {
