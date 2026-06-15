@@ -1,5 +1,5 @@
 import { accounts } from "@/store/accountStore";
-import { AccountType, BonusAccount } from "@/interfaces/account";
+import { Account, AccountType, BonusAccount } from "@/interfaces/account";
 import { balanceFloorByAccountType } from "@/constants/account";
 
 export function registerAccount(
@@ -20,11 +20,16 @@ export function registerAccount(
   return newAccount;
 }
 
-export function checkBalance(accountNumber: number): number {
+export function getAccount(accountNumber: number): Account {
   const account = accounts.get(accountNumber);
   if (!account) {
     throw new Error(`Conta ${accountNumber} não encontrada`);
   }
+  return account;
+}
+
+export function checkBalance(accountNumber: number): number {
+  const account = getAccount(accountNumber);
   return account.balance;
 }
 
@@ -33,10 +38,7 @@ export function credit(
   amount: number,
   source: "deposit" | "transfer" = "deposit"
 ) {
-  const account = accounts.get(accountNumber);
-  if (!account) {
-    throw new Error(`Conta ${accountNumber} não encontrada`);
-  }
+  const account = getAccount(accountNumber);
   if (amount <= 0) {
     throw new Error("O valor deve ser maior que zero.");
   }
@@ -49,10 +51,7 @@ export function credit(
 }
 
 export function debit(accountNumber: number, amount: number) {
-  const account = accounts.get(accountNumber);
-  if (!account) {
-    throw new Error(`Conta ${accountNumber} não encontrada`);
-  }
+  const account = getAccount(accountNumber);
   if (amount <= 0) {
     throw new Error("O valor deve ser maior que zero.");
   }
@@ -81,10 +80,7 @@ export function transfer(
 }
 
 export function yieldInterest(accountNumber: number, interestRate: number) {
-  const account = accounts.get(accountNumber);
-  if (!account) {
-    throw new Error(`Conta ${accountNumber} não encontrada`);
-  }
+  const account = getAccount(accountNumber);
   if (account.type !== "savings") {
     throw new Error("Apenas contas poupança podem render juros.");
   }
