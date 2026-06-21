@@ -30,6 +30,17 @@ jobs:
       - name: Build project
         run: npm run build
 
+      - name: Get Tag Name
+        id: get_tag
+        run: |
+          TAG_NAME=$(git describe --tags --exact-match ${{ github.event.workflow_run.head_sha }} 2>/dev/null || echo "")
+
+          if [ -z "$TAG_NAME" ]; then
+            TAG_NAME="${{ github.event.workflow_run.head_branch }}"
+          fi
+
+          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+
       - name: Generate zip package
         run: |
           npx bestzip "${{ github.ref_name }}.zip" src/ package.json package-lock.json
