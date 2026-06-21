@@ -1,0 +1,46 @@
+name: Release Candidate
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [staging]
+
+permissions:
+  contents: write
+
+jobs:
+  tag-rc:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calculate next RC tag
+        id: rc
+        run: |
+          git fetch --tags --force
+
+          latest=$(git tag -l 'rc-*' | grep -E '^rc-[0-9]+\.[0-9]+$' | sort -V | tail -n1)
+
+          if [ -z "$latest" ]; then
+            next="rc-1.0"
+          else
+            ver=${latest#rc-} # X.Y
+            major=${ver%.*}   # X
+            minor=${ver#*.}   # Y
+            next="rc-${major}.$((minor + 1))"
+          fi
+
+          echo "Latest RC found: ${latest:-<nenhuma>}"
+          echo "Next RC: $next"
+          echo "tag=$next" >> "$GITHUB_OUTPUT"
+
+      - name: Create and push tag
+        run: |
+          TAG="${{ steps.rc.outputs.tag }}"
+          git tag "$TAG"
+          git push origin "$TAG"
