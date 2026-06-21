@@ -1,8 +1,8 @@
-name: package-release
+name: Package Release
 
 on:
   workflow_run:
-    workflows: ["release-candidate", "bugfix-release"]
+    workflows: ["Release Candidate", "Bugfix Release"]
     types:
       - completed
 
