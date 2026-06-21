@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main, staging]
+  pull_request:
+    branches: [main, staging]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Quality (Static Analysis)
+        run: npm run lint
+
+      - name: Unit tests
+        run: npx vitest run
+
+      - name: Create build tag
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          TAG="build-$(date -u +%Y%m%dT%H%M%S)"
+          echo "Creating tag $TAG"
+          git tag "$TAG"
+          git push origin "$TAG"

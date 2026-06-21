@@ -9,7 +9,7 @@
 
 ```bash
 # 1. Clone o repositório
-git clone <url-do-repositorio>
+git clone https://github.com/BlackbirdBlina/Sistema-Bancario-GitLab-Flow.git
 cd Sistema-Bancario-GitLab-Flow
 
 # 2. Instale as dependências
@@ -26,7 +26,6 @@ Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 ## Integrantes
 
 - Rodrigo Eduardo Dantas Barbalho
-
   - Perfil no GitHub: [Rodrigo Eduardo](https://github.com/rodrigoeduardo)
 
 - Sabrina da Silva Barbosa Venceslau
