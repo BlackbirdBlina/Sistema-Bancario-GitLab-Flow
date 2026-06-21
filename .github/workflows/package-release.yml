@@ -1,12 +1,14 @@
 name: package-release
 
 on:
-  push:
-    tags:
-      - "rc-*"
+  workflow_run:
+    workflows: ["release-candidate", "bugfix-release"]
+    types:
+      - completed
 
 jobs:
   build-and-package:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
