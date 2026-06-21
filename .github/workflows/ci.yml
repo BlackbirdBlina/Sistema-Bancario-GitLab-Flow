@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
   pull_request:
-    branches: [main]
+    branches: [main, staging]
   workflow_dispatch:
 
 permissions:
@@ -37,7 +37,7 @@ jobs:
         run: npx vitest run
 
       - name: Create build tag
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           TAG="build-$(date -u +%Y%m%dT%H%M%S)"
           echo "Creating tag $TAG"
