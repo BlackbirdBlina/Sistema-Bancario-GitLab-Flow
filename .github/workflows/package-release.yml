@@ -32,14 +32,16 @@ jobs:
 
       - name: Get Tag Name
         id: get_tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          TAG_NAME=$(git describe --tags --exact-match ${{ github.event.workflow_run.head_sha }} 2>/dev/null || echo "")
+          SHA="${{ github.event.workflow_run.head_sha }}"
+          REPO="${{ github.repository }}"
+          TAG_NAME=$(gh api repos/$REPO/commits/$SHA/refs --jq '.[] | select(.ref | contains("refs/tags/")) | .ref' | head -n 1 | sed 's|refs/tags/||')
 
           if [ -z "$TAG_NAME" ]; then
             TAG_NAME="${{ github.event.workflow_run.head_branch }}"
           fi
-
-          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Generate zip package
         run: |
