@@ -33,6 +33,6 @@ Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 
 ## Stack de desenvolvimento
 
-- Linguagem: TypeScript,
-- Framework: Next.js 16 + React 19,
-- Estilização: Tailwind CSS v4.
+- Linguagem: TypeScript
+- Framework: Next.js 16 + React 19
+- Estilização: Tailwind CSS v4
