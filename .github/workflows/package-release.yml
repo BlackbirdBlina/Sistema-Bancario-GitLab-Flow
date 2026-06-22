@@ -41,6 +41,7 @@ jobs:
             TAG_NAME="${{ github.event.workflow_run.head_branch }}"
           fi
 
+          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
       - name: Generate zip package
         run: |
           npx bestzip "${{ steps.get_tag.outputs.tag }}.zip" src/ package.json package-lock.json
