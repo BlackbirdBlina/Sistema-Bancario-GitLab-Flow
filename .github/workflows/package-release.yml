@@ -35,7 +35,7 @@ jobs:
         run: |
           git fetch --tags --force
 
-          TAG_NAME=$(git tag -l 'rc-*' | grep -E '^rc-[0-9]+\.[0-9]+$' | sort -V | tail -n1)
+          TAG_NAME=$(git tag -l 'rc-*' | sort -V | tail -n1)
 
           if [ -z "$TAG_NAME" ]; then
             TAG_NAME="${{ github.event.workflow_run.head_branch }}"
