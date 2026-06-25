@@ -1,0 +1,51 @@
+name: Bugfix Release
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [staging]
+
+permissions:
+  contents: write
+
+jobs:
+  tag-rc:
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'bugfix')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+
+      - name: Calculate next RC tag
+        id: calc-tag
+        run: |
+          git fetch --tags --force
+
+          LATEST=$(git tag -l 'rc-*' \
+            | grep -E '^rc-[0-9]+\.[0-9]+(\.[0-9]+)?$' \
+            | sort -V | tail -n1)
+
+          if [ -z "$LATEST" ]; then
+            echo "::error::No rc-X.Y[.Z] tag found in stabilization."
+            exit 1
+          fi
+
+          VERSION=${LATEST#rc-}
+          X=$(echo "$VERSION" | cut -d. -f1)
+          Y=$(echo "$VERSION" | cut -d. -f2)
+          Z=$(echo "$VERSION" | cut -d. -f3)
+          [ -z "$Z" ] && Z=0
+          NEW="rc-$X.$Y.$((Z + 1))"
+
+          echo "Latest tag: $LATEST -> new tag: $NEW"
+          git tag "$NEW"
+          echo "new_tag=$NEW" >> "$GITHUB_OUTPUT"
+
+      - name: Push new tag
+        run: git push origin "${{ steps.calc-tag.outputs.new_tag }}"

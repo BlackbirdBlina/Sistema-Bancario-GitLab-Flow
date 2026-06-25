@@ -1,0 +1,51 @@
+name: Hotfix Production
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [production]
+
+permissions:
+  contents: write
+
+jobs:
+  tag-hotfix:
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'hotfix')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+          fetch-depth: 0
+
+      - name: Calculate next hotfix tag
+        id: calc-tag
+        run: |
+          git fetch --tags --force
+
+          LATEST=$(git tag -l 'rel-*' \
+            | grep -E '^rel-[0-9]+\.[0-9]+(\.[0-9]+)?$' \
+            | sort -V | tail -n1)
+
+          if [ -z "$LATEST" ]; then
+            echo "::error::No rel-X.Y[.Z] tag found in production."
+            exit 1
+          fi
+
+          VERSION=${LATEST#rel-}
+          X=$(echo "$VERSION" | cut -d. -f1)
+          Y=$(echo "$VERSION" | cut -d. -f2)
+          Z=$(echo "$VERSION" | cut -d. -f3)
+          [ -z "$Z" ] && Z=0
+          NEW="rel-$X.$Y.$((Z + 1))"
+
+          echo "Latest tag: $LATEST -> new tag: $NEW"
+          git tag "$NEW"
+          echo "new_tag=$NEW" >> "$GITHUB_OUTPUT"
+
+      - name: Push new tag
+        run: git push origin "${{ steps.calc-tag.outputs.new_tag }}"

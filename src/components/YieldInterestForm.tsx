@@ -5,9 +5,6 @@ import { yieldInterest } from "@/services/accountService";
 import FeedbackMessage, { Feedback } from "./FeedbackMessage";
 import { accounts } from "@/store/accountStore";
 
-const formatBRL = (value: number) =>
-  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(value);
-
 interface YieldInterestFormProps {
   onChange?: () => void;
 }
