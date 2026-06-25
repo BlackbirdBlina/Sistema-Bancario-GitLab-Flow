@@ -119,6 +119,10 @@ docker run -p 8080:8080 imagemsb:v1
   }'
   ```
 
+## Link para Docker Hub
+
+Sistema Bancário: https://hub.docker.com/r/r9drigo/sistema-bancario
+
 ## Integrantes
 
 - Rodrigo Eduardo Dantas Barbalho
