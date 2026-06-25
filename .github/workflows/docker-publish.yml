@@ -1,0 +1,48 @@
+name: Docker Publish
+
+on:
+  workflow_run:
+    workflows: ["Release Production", "Hotfix Production"]
+    types:
+      - completed
+
+jobs:
+  build-and-push:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve release tag
+        id: tag
+        run: |
+          git fetch --tags --force
+          TAG=$(git tag -l 'rel-*' \
+            | grep -E '^rel-[0-9]+\.[0-9]+(\.[0-9]+)?$' \
+            | sort -V | tail -n1)
+          if [ -z "$TAG" ]; then
+            echo "::error::Nenhuma tag rel-* encontrada."
+            exit 1
+          fi
+          echo "Tag selecionada: $TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout release tag
+        run: git checkout "${{ steps.tag.outputs.tag }}"
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sistema-bancario:${{ steps.tag.outputs.tag }}
