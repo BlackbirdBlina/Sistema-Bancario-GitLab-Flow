@@ -34,7 +34,7 @@ docker run -p 8080:8080 imagemsb:v1
 
 ```
 
-## Exemplos de chamadas aos endpoints
+## Exemplos de endpoints/rotas
 
 - Criar uma nova conta
   - POST /api/banco/conta
