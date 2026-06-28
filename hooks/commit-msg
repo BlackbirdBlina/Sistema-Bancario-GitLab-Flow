@@ -1,0 +1,28 @@
+#!/bin/bash
+
+REPO_OWNER="BlackbirdBlina"
+REPO_NAME="Sistema-Bancario-GitLab-Flow"
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+if [[ ! "$COMMIT_MSG" =~ ^#[0-9]+[[:space:]]*([-–])[[:space:]]*.+$ ]]; then
+    echo "[ERRO] Padrão de commit inválido!"
+    echo "Formato esperado: #NUM_ISSUE - MENSAGEM (Ex: #33 - Correção da tela)"
+    exit 1
+fi
+
+ISSUE_NUM=$(echo "$COMMIT_MSG" | grep -oE '#[0-9]+' | head -n1 | tr -d '#')
+
+echo "Validando se a Issue #$ISSUE_NUM existe no GitHub..."
+
+HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://api.github.com/repos/$REPO_OWNER/$REPO_NAME/issues/$ISSUE_NUM")
+
+if [ "$HTTP_STATUS" -ne 200 ]; then
+    echo "[ERRO] A Issue #$ISSUE_NUM não existe neste repositório do GitHub."
+    echo "Por favor, verifique o número da issue e tente novamente."
+    exit 1
+fi
+
+echo "Commit validado com sucesso!"
+exit 0
