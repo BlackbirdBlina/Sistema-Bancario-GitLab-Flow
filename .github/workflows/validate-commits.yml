@@ -1,0 +1,41 @@
+name: Validate Commit Messages
+
+on:
+  pull_request:
+    branches: [main, staging, production]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate-commits:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -e
+          chmod +x hooks/commit-msg
+          FAILED=0
+          TMPFILE=$(mktemp)
+
+          while IFS= read -r MSG; do
+            [[ -z "$MSG" ]] && continue
+            echo "$MSG" > "$TMPFILE"
+            if ! bash hooks/commit-msg "$TMPFILE"; then
+              FAILED=1
+            fi
+          done < <(git log "$BASE_SHA..$HEAD_SHA" --pretty=format:"%s")
+
+          rm -f "$TMPFILE"
+          exit $FAILED
