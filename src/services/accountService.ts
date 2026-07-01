@@ -53,7 +53,7 @@ export function credit(
 export function debit(accountNumber: number, amount: number) {
   const account = getAccount(accountNumber);
   if (amount <= 0) {
-    throw new Error("O valor deve ser positivo.");
+    throw new Error("O valor deve ser maior que zero.");
   }
   const floor = balanceFloorByAccountType[account.type];
   const newBalance = account.balance - amount;
@@ -88,6 +88,7 @@ export function yieldInterest(accountNumber: number, interestRate: number) {
     throw new Error("A taxa de juros deve ser maior que zero.");
   }
   const interest = account.balance * (interestRate / 100);
+  
   account.balance += interest;
   accounts.set(accountNumber, account);
 }
