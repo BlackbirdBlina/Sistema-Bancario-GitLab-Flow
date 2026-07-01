@@ -88,6 +88,7 @@ export function yieldInterest(accountNumber: number, interestRate: number) {
     throw new Error("A taxa de juros deve ser maior que zero.");
   }
   const interest = account.balance * (interestRate / 100);
+  
   account.balance += interest;
   accounts.set(accountNumber, account);
 }
