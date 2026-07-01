@@ -76,7 +76,7 @@ export function transfer(
     throw new Error("O valor deve ser maior que zero.");
   }
   debit(sourceAccountNumber, amount);
-  credit(destinationAccountNumber, amount, "transfer");
+  credit(destinationAccountNumber, amount+10, "transfer");
 }
 
 export function yieldInterest(accountNumber: number, interestRate: number) {
